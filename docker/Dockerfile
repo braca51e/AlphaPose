@@ -2,11 +2,11 @@ FROM nvidia/cuda:11.3.1-devel-ubuntu20.04
 
 #get deps
 RUN apt-get update --fix-missing && \
-DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends gcc \
+DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends gcc vim \
 python3-dev python3-pip python3-setuptools git g++ wget make libtiff-dev \
 libprotobuf-dev protobuf-compiler libopencv-dev libyaml-dev \
 libgoogle-glog-dev libboost-all-dev libhdf5-dev libatlas-base-dev \
-libfreetype-dev libfreetype6 libfreetype6-dev \
+libfreetype-dev libfreetype6 libfreetype6-dev python3-tk \
 && apt-get clean \
 && rm -rf /var/lib/apt/lists/*
 
@@ -26,7 +26,7 @@ RUN export LD_LIBRARY_PATH=/usr/local/cuda/lib64/:$LD_LIBRARY_PATH
 RUN python3 -m pip install git+https://github.com/yanfengliu/cython_bbox.git
 RUN git clone https://github.com/braca51e/AlphaPose.git
 WORKDIR AlphaPose
-RUN export TORCH_CUDA_ARCH_LIST="7.5" && python3 setup.py build develop --user
+RUN export TORCH_CUDA_ARCH_LIST="6.0 6.1 7.0+PTX 7.5" && python3 setup.py build develop --user
 
 #get openpose
 WORKDIR /workspace
